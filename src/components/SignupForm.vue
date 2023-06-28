@@ -1,0 +1,54 @@
+<template>
+    <div>
+        <h2>アカウントを登録</h2>
+        <!-- ======= 👇 ここから変更する ======= -->
+        <form @submit.prevent="signUp">
+            <!-- ====== 👆 ここまで変更する ======= -->
+            <input type="text" required placeholder="名前" v-model="name">
+            <input type="email" required placeholder="メールアドレス" v-model="email" autocomplete="off">
+            <input type="password" required placeholder="パスワード" v-model="password" autocomplete="off">
+            <input type="password" required placeholder="パスワード（確認用）" v-model="passwordConfirmation" autocomplete="off">
+            <div class="error">{{ error }}</div>
+            <button>登録する</button>
+        </form>
+    </div>
+</template>
+  
+<script>
+import axios from 'axios'
+
+export default {
+    data() {
+        return {
+            name: '',
+            email: '',
+            password: '',
+            passwordConfirmation: '',
+            error: null
+        }
+    },
+    // ======= 👇 ここから追加する =======
+    methods: {
+        async signUp() {
+            try {
+                const res = await axios.post('http://localhost:3000/auth', {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                    password_confirmation: this.passwordConfirmation
+                }
+                )
+                if (!res) {
+                    throw new Error('アカウントを登録できませんでした')
+                }
+                console.log({ res })
+                return res
+            } catch (error) {
+                this.error = 'アカウントを登録できませんでした'
+            }
+        }
+        // ====== 👆 ここまで追加する =======
+    }
+}
+</script>
+  

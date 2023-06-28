@@ -1,51 +1,64 @@
 <template>
-    <div>
-        <h1>{{ title }}</h1>
+    <div class="container welcome">
+      <p>ようこそ</p>
+      <div v-if="shouldShowLoginForm">
+        <LoginForm />
+        <p class="change-form">初めての方は<span @click="shouldShowLoginForm = false">こちら</span>をクリック</p>
+      </div>
+      <div v-if="!shouldShowLoginForm">
+        <SignupForm />
+        <p class="change-form">アカウントをお持ちの方は<span @click="shouldShowLoginForm = true">こちら</span>をクリック</p>
+      </div>
     </div>
-    <h1>
-        <TestComponent @toggle="toggle" message="Componentにメッセージが渡されています"/>
-        <p v-if="isEnabled"></p>
-    </h1>
-</template>
-
-<script>
-
-import TestComponent from '../components/TestComponent.vue'
-
-export default {
-
-  components: {
-    TestComponent
-  },
-
-  data () {
-    return {
-      title: 'コンポーネントから読み込んだ充電器',
-      subtitle: 'TYPEーC',
-      isEnabled: true
-    }
-  },
-  computed: {
-    text() {
-        if(this.isEnabled) {
-            return 'trueの値だよ'
-        } else {
-            return 'falseの値だよ'
-        }
-    }
-  },
-  methods: {
-    toggle () {
-        this.isEnabled = !this.isEnabled
+  </template>
+  
+  <script>
+  import LoginForm from '../components/LoginForm.vue'
+  import SignupForm from "../components/SignupForm.vue"
+  export default  {
+    components: { SignupForm, LoginForm },
+    data () {
+      return {
+        shouldShowLoginForm: false
+      }
     }
   }
-}
-</script>
-
-
-<style scoped>
-  p {
-    font-size: 20px;
-    color: red;
-  }
-</style>
+  </script>
+  
+  
+  <style>
+    .welcome {
+      text-align: center;
+      padding: 20px 0;
+    }
+    /* フォームのスタイル */
+    .welcome form {
+      width: 300px;
+      margin: 20px auto;
+    }
+    .welcome label {
+      display: block;
+      margin: 20px 0 10px;
+    }
+    .welcome input {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px auto;
+      border-radius: 4px;
+      border: 1px solid #eee;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .welcome span{
+      font-weight: bold;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .welcome button {
+      margin: 20px auto;
+    }
+    .change-form {
+      font-size: 14px;
+      margin: 10px;
+    }
+  </style>
