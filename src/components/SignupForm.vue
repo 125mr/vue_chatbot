@@ -14,10 +14,15 @@
     </div>
 </template>
   
+<!-- ...省略 -->
 <script>
 import axios from 'axios'
+import setItem from '../auth/setItem'
 
 export default {
+    // ======= 👇 ここから追加する =======
+    emits: ['redirectToChatRoom'],
+    // ======= 👆 ここまで追加する =======
     data() {
         return {
             name: '',
@@ -27,9 +32,10 @@ export default {
             error: null
         }
     },
-    // ======= 👇 ここから追加する =======
     methods: {
         async signUp() {
+            this.error = null
+
             try {
                 const res = await axios.post('http://localhost:3000/auth', {
                     name: this.name,
@@ -38,17 +44,27 @@ export default {
                     password_confirmation: this.passwordConfirmation
                 }
                 )
+
                 if (!res) {
                     throw new Error('アカウントを登録できませんでした')
                 }
+
+                // ======= 👇 ここから追加する =======
+                if (!this.error) {
+                    setItem(res.headers, res.data.data.name)
+
+                    this.$emit('redirectToChatRoom')
+                }
+                // ======= 👆 ここまで追加する =======
+
                 console.log({ res })
+
                 return res
             } catch (error) {
                 this.error = 'アカウントを登録できませんでした'
             }
         }
-        // ====== 👆 ここまで追加する =======
     }
 }
 </script>
-  
+<!-- ...省略 -->
